@@ -2,7 +2,7 @@
 
 // TODO: replace with the STZLAR official WhatsApp number before going live.
 // Format: country code + area code + number, digits only (e.g. 55 + DDD + number).
-const WHATSAPP_NUMBER = "5500000000000";
+const WHATSAPP_NUMBER = "5585994290607";
 
 // Matches the promise in the site-wide promo bar ("frete grátis acima de
 // R$350"). Applies to the fixed-price local deliveries (Acarape, Redenção).
