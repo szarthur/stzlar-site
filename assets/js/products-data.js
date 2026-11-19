@@ -21,7 +21,7 @@ const PRODUCTS = [
     tag: { label: "Lançamento", classe: "" },
     status: "disponivel",
     tamanhos: [
-      { tamanho: "Tamanho único", disponivel: false },
+      { tamanho: "Tamanho único", disponivel: true },
       //{ tamanho: "P",  disponivel: true },
      // { tamanho: "M",  disponivel: true },
      // { tamanho: "G",  disponivel: true },
