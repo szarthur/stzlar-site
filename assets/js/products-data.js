@@ -21,18 +21,18 @@ const PRODUCTS = [
     tag: { label: "Lançamento", classe: "" },
     status: "disponivel",
     tamanhos: [
-      { tamanho: "PP", disponivel: false },
-      { tamanho: "P",  disponivel: true },
-      { tamanho: "M",  disponivel: true },
-      { tamanho: "G",  disponivel: true },
-      { tamanho: "GG", disponivel: true }
+      { tamanho: "Tamanho único", disponivel: false },
+      //{ tamanho: "P",  disponivel: true },
+     // { tamanho: "M",  disponivel: true },
+     // { tamanho: "G",  disponivel: true },
+      //{ tamanho: "GG", disponivel: true }
     ],
     medidas: [
-      { tamanho: "PP", busto: 80, cintura: 62, quadril: 88 },
-      { tamanho: "P",  busto: 84, cintura: 66, quadril: 92 },
-      { tamanho: "M",  busto: 88, cintura: 70, quadril: 96 },
-      { tamanho: "G",  busto: 92, cintura: 74, quadril: 100 },
-      { tamanho: "GG", busto: 96, cintura: 78, quadril: 104 }
+     // { tamanho: "PP", busto: 80, cintura: 62, quadril: 88 },
+      //{ tamanho: "P",  busto: 84, cintura: 66, quadril: 92 },
+      //{ tamanho: "M",  busto: 88, cintura: 70, quadril: 96 },
+      //{ tamanho: "G",  busto: 92, cintura: 74, quadril: 100 },
+      //{ tamanho: "GG", busto: 96, cintura: 78, quadril: 104 }
     ]
   },
   {
@@ -47,14 +47,14 @@ const PRODUCTS = [
     tag: { label: "Mais vendido", classe: "tag-bestseller" },
     status: "disponivel",
     tamanhos: [
-      { tamanho: "P",  disponivel: true },
-      { tamanho: "M",  disponivel: true },
-      { tamanho: "G",  disponivel: true }
+      { tamanho: "Tamanho único",  disponivel: true },
+      //{ tamanho: "M",  disponivel: true },
+      //{ tamanho: "G",  disponivel: true }
     ],
     medidas: [
-      { tamanho: "P", busto: 84, cintura: 66, quadril: 92 },
-      { tamanho: "M", busto: 88, cintura: 70, quadril: 96 },
-      { tamanho: "G", busto: 92, cintura: 74, quadril: 100 }
+      //{ tamanho: "P", busto: 84, cintura: 66, quadril: 92 },
+      //{ tamanho: "M", busto: 88, cintura: 70, quadril: 96 },
+      //{ tamanho: "G", busto: 92, cintura: 74, quadril: 100 }
     ]
   },
   {
