@@ -195,3 +195,22 @@
 .secure-note svg{width:12px; height:12px; stroke-width:1.3;}
 
 .cart-main .breadcrumb{margin-bottom:26px;}
+
+/* ---------- CATÁLOGO: cabeçalho centralizado ---------- */
+.catalog-page .breadcrumb{text-align:center;}
+.catalog-page .eyebrow{display:block; text-align:center;}
+.catalog-page .cart-title{text-align:center;}
+.catalog-page .category-count{text-align:center;}
+.catalog-page .filter-pills{justify-content:center;}           /* desktop: uma linha só, centralizada */
+@media(max-width:600px){
+  .catalog-page .filter-pills{                                 /* mobile: 2 x 2, tamanho original */
+    display:grid; grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:10px; max-width:340px; margin-left:auto; margin-right:auto;
+  }
+  .catalog-page .filter-pill{text-align:center; padding:11px 10px;}
+}
+
+/* ---------- Títulos do topo centralizados (carrinho, favoritos, políticas) ---------- */
+.center-head > .breadcrumb{text-align:center;}
+.center-head > .eyebrow{display:block; text-align:center;}
+.center-head > .cart-title{text-align:center;}
