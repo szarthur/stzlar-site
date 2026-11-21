@@ -64,3 +64,8 @@ function initCatalog(){
 }
 
 initCatalog();
+
+// Estoque novo chegou da planilha: redesenha a lista mantendo o filtro atual.
+window.addEventListener('stzlar:stock', () => {
+  renderCatalog(new URLSearchParams(window.location.search).get('cat') || 'todas');
+});

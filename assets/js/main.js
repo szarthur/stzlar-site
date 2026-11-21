@@ -58,7 +58,11 @@
   // Homepage featured vitrine — rendered from PRODUCTS instead of hand-written
   // per-card HTML, so a price/tag change only has to happen in one place.
   const featuredGrid = document.getElementById('featuredGrid');
-  if (featuredGrid && typeof PRODUCTS !== 'undefined' && typeof renderProductCard === 'function'){
+  function renderFeatured(){
     featuredGrid.innerHTML = PRODUCTS.slice(0, 4).map(p => renderProductCard(p)).join('');
     if (typeof updateFavoriteButtonsState === 'function') updateFavoriteButtonsState();
+  }
+  if (featuredGrid && typeof PRODUCTS !== 'undefined' && typeof renderProductCard === 'function'){
+    renderFeatured();
+    window.addEventListener('stzlar:stock', renderFeatured);
   }

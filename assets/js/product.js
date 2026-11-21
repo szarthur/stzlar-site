@@ -79,16 +79,37 @@ function renderProduct(p){
     });
   }
 
+  renderStockUI(p);
+
+  const tbody = document.getElementById('sizeTableBody');
+  tbody.innerHTML = p.medidas.map(m =>
+    `<tr><td>${escapeHTML(m.tamanho)}</td><td>${escapeHTML(m.busto)}</td><td>${escapeHTML(m.cintura)}</td><td>${escapeHTML(m.quadril)}</td></tr>`
+  ).join('');
+
+  const relatedGrid = document.getElementById('relatedGrid');
+  relatedGrid.innerHTML = '';
+  relatedGrid.innerHTML = getRelatedProducts(p.id, 4).map(r => renderProductCard(r)).join('');
+
+  if (typeof updateFavoriteButtonsState === 'function') updateFavoriteButtonsState();
+}
+
+// Tamanhos + aviso de estoque + botão de comprar. Separado para poder ser
+// redesenhado quando o estoque novo chega da planilha.
+function renderStockUI(p){
   const sizeOptions = document.getElementById('sizeOptions');
   sizeOptions.innerHTML = '';
+  // Redesenho com estoque novo: se o tamanho escolhido sumiu, limpa a escolha.
+  const escolhido = p.tamanhos.find(t => t.tamanho === selectedSize);
+  if (!escolhido || !escolhido.disponivel){ selectedSize = null; }
   const esgotadoGeral = p.status === 'esgotado';
   p.tamanhos.forEach(s => {
     const btn = document.createElement('button');
     btn.type = 'button';
     btn.textContent = s.tamanho;
     const unavailable = !s.disponivel || esgotadoGeral;
-    btn.className = 'size-btn' + (unavailable ? ' unavailable' : '');
-    btn.setAttribute('aria-pressed', 'false');
+    const isSel = !unavailable && s.tamanho === selectedSize;
+    btn.className = 'size-btn' + (unavailable ? ' unavailable' : '') + (isSel ? ' selected' : '');
+    btn.setAttribute('aria-pressed', isSel ? 'true' : 'false');
     if (unavailable){
       btn.setAttribute('aria-disabled', 'true');
       btn.setAttribute('aria-label', `Tamanho ${s.tamanho}, indisponível`);
@@ -99,6 +120,13 @@ function renderProduct(p){
         btn.classList.add('selected');
         btn.setAttribute('aria-pressed', 'true');
         selectedSize = s.tamanho;
+        // Ajusta a quantidade ao estoque do tamanho escolhido.
+        const max = (typeof getSizeStock === 'function') ? getSizeStock(product.id, s.tamanho) : null;
+        if (max !== null && selectedQty > max){
+          selectedQty = Math.max(1, max);
+          const qv = document.querySelector('#qtyStepper .qty-value');
+          if (qv) qv.textContent = selectedQty;
+        }
         resetAddedState();
         announce(`Tamanho ${s.tamanho} selecionado`);
       });
@@ -106,10 +134,6 @@ function renderProduct(p){
     sizeOptions.appendChild(btn);
   });
 
-  const tbody = document.getElementById('sizeTableBody');
-  tbody.innerHTML = p.medidas.map(m =>
-    `<tr><td>${escapeHTML(m.tamanho)}</td><td>${escapeHTML(m.busto)}</td><td>${escapeHTML(m.cintura)}</td><td>${escapeHTML(m.quadril)}</td></tr>`
-  ).join('');
 
   const addBtn = document.getElementById('addBagBtn');
   const stockNote = document.getElementById('stockNote');
@@ -120,6 +144,15 @@ function renderProduct(p){
     addBtn.textContent = 'Esgotado';
     addBtn.disabled = true;
     addBtn.classList.add('disabled');
+  } else {
+    if (addBtn.disabled){
+      addBtn.disabled = false;
+      addBtn.classList.remove('disabled');
+      addBtn.textContent = 'Adicionar à sacola';
+    }
+  }
+  if (esgotadoGeral){
+    // (mensagem já definida acima)
   } else if (p.status === 'poucas'){
     stockNote.className = 'stock-note status-poucas';
     stockNote.innerHTML = '<span class="stock-dot"></span> Poucas unidades disponíveis';
@@ -128,11 +161,6 @@ function renderProduct(p){
     stockNote.innerHTML = '<span class="stock-dot"></span> Em estoque — envio em até 2 dias úteis';
   }
 
-  const relatedGrid = document.getElementById('relatedGrid');
-  relatedGrid.innerHTML = '';
-  relatedGrid.innerHTML = getRelatedProducts(p.id, 4).map(r => renderProductCard(r)).join('');
-
-  if (typeof updateFavoriteButtonsState === 'function') updateFavoriteButtonsState();
 }
 
 const qtyStepper = document.getElementById('qtyStepper');
@@ -142,6 +170,8 @@ if (qtyStepper){
     if (selectedQty > 1){ selectedQty -= 1; qtyValueEl.textContent = selectedQty; resetAddedState(); }
   });
   qtyStepper.querySelector('.qty-plus').addEventListener('click', () => {
+    const max = (selectedSize && typeof getSizeStock === 'function') ? getSizeStock(product.id, selectedSize) : null;
+    if (max !== null && selectedQty + 1 > max){ announce(`Só temos ${max} unidade${max > 1 ? 's' : ''} desse tamanho`); return; }
     selectedQty += 1; qtyValueEl.textContent = selectedQty; resetAddedState();
   });
 }
@@ -221,3 +251,6 @@ document.querySelectorAll('[data-open-sizes]').forEach(btn => {
     document.querySelector('[data-accordion="medidas"]').scrollIntoView({ behavior: 'smooth', block: 'center' });
   });
 });
+
+// Estoque novo chegou da planilha: atualiza tamanhos e aviso sem recarregar a página.
+window.addEventListener('stzlar:stock', () => { if (product) renderStockUI(product); });

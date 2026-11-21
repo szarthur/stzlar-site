@@ -108,6 +108,8 @@ function renderCart(){
       }
     });
     row.querySelector('.qty-plus').addEventListener('click', () => {
+      const max = (typeof getSizeStock === 'function') ? getSizeStock(item.productId, item.tamanho) : null;
+      if (max !== null && item.quantidade + 1 > max) return; // não passa do estoque
       updateCartQuantity(index, item.quantidade + 1);
       renderCart();
     });

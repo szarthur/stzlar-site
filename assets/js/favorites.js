@@ -20,13 +20,14 @@ function renderFavoritesPage(){
   emptyState.style.display = 'none';
 
   grid.innerHTML = favProducts.map(p => `
-    <a href="produto.html?id=${escapeHTML(p.id)}" class="prod-card">
+    <a href="produto.html?id=${escapeHTML(p.id)}" class="prod-card${p.status === 'esgotado' ? ' is-soldout' : ''}">
       <div class="prod-media">
         <button class="card-fav-btn active" data-fav-id="${escapeHTML(p.id)}" aria-label="Remover dos favoritos">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 21s-7.5-4.6-10-9.2C.5 8 2 4 6 4c2.2 0 3.8 1.4 6 4 2.2-2.6 3.8-4 6-4 4 0 5.5 4 4 7.8C19.5 16.4 12 21 12 21z"/></svg>
         </button>
         ${p.tag ? `<span class="prod-tag ${escapeHTML(p.tag.classe)}">${escapeHTML(p.tag.label)}</span>` : ''}
         <img src="${escapeHTML(p.imagens[0])}" alt="${escapeHTML(p.nome)}" loading="lazy">
+        ${p.status === 'esgotado' ? '<span class="prod-soldout">Esgotado</span>' : ''}
         <span class="prod-view">Ver produto</span>
       </div>
       <div class="prod-info"><span class="cat">${escapeHTML(p.categoria)}</span><h4>${escapeHTML(p.nome)}</h4><span class="price">${formatBRL(p.preco)}</span></div>
@@ -43,3 +44,5 @@ document.addEventListener('click', (e) => {
     setTimeout(renderFavoritesPage, 0);
   }
 });
+
+window.addEventListener('stzlar:stock', renderFavoritesPage);

@@ -23,3 +23,4 @@ function renderNewPage(){
 }
 
 renderNewPage();
+window.addEventListener('stzlar:stock', renderNewPage);

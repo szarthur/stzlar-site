@@ -545,6 +545,14 @@ const PRODUCTS = [
   }
 ];
 
+// Quantidade em estoque de um tamanho (número) ou null se a planilha não controla esse tamanho.
+function getSizeStock(productId, tamanho){
+  const p = getProductById(productId);
+  if (!p) return null;
+  const s = p.tamanhos.find(x => x.tamanho === tamanho);
+  return (s && typeof s.estoque === 'number') ? s.estoque : null;
+}
+
 function getProductById(id){
   return PRODUCTS.find(p => p.id === id) || null;
 }
@@ -573,13 +581,14 @@ function renderProductCard(p, index){
   const img = escapeHTML(p.imagens[0]);
   const id = escapeHTML(p.id);
   return `
-    <a href="produto.html?id=${id}" class="prod-card">
+    <a href="produto.html?id=${id}" class="prod-card${p.status === 'esgotado' ? ' is-soldout' : ''}">
       <div class="prod-media">
         <button class="card-fav-btn" data-fav-id="${id}" aria-label="Favoritar">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 21s-7.5-4.6-10-9.2C.5 8 2 4 6 4c2.2 0 3.8 1.4 6 4 2.2-2.6 3.8-4 6-4 4 0 5.5 4 4 7.8C19.5 16.4 12 21 12 21z"/></svg>
         </button>
         ${p.tag ? `<span class="prod-tag ${escapeHTML(p.tag.classe)}">${escapeHTML(p.tag.label)}</span>` : ''}
         <img src="${img}" alt="${nome}"${(typeof index === 'number' && index < 4) ? '' : ' loading="lazy"'} decoding="async">
+        ${p.status === 'esgotado' ? '<span class="prod-soldout">Esgotado</span>' : ''}
         <span class="prod-view">Ver produto</span>
       </div>
       <div class="prod-info"><span class="cat">${categoria}</span><h4>${nome}</h4><span class="price">${formatBRL(p.preco)}</span></div>
