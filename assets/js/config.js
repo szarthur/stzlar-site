@@ -5,4 +5,4 @@ const WHATSAPP_NUMBER = "5585994290667";
 
 // Estoque ligado à planilha do Google. Cole aqui o link "/exec" gerado pelo Apps Script (aba apps-script/Codigo.gs).
 // Deixe "" para o site usar só o estoque do products-data.js.
-const STOCK_URL = "";
+const STOCK_URL = "https://script.google.com/macros/s/AKfycbxxBM4zy6WuGReuGP1qz-VwaZ-cnNi6ouUYOvT5vdJlvI4MxTO1NLEo1K0cDVYssdeMcQ/exec";
