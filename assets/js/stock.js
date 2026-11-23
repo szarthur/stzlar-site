@@ -19,21 +19,48 @@
     return 'disponivel';
   }
 
+  var TODOS = PRODUCTS.slice(); // lista completa (inclui peças que a planilha escondeu)
+  var CLASSES_ETIQUETA = { 'mais vendido': 'tag-bestseller', 'promocao': 'tag-promo', 'ultimas pecas': 'tag-last' };
+
+  function semAcento(s){
+    return String(s || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim();
+  }
+
   function aplicar(itens){
     var assinatura = [];
-    PRODUCTS.forEach(function(p){
+    TODOS.forEach(function(p){
       var it = itens[p.id];
-      if (!it || typeof it !== 'object' || !it.tamanhos) return;
-      p.tamanhos.forEach(function(s){
-        var q = it.tamanhos[s.tamanho];
-        if (typeof q === 'number' && isFinite(q)){
-          s.estoque = Math.max(0, Math.floor(q));
-          s.disponivel = s.estoque > 0;
-        }
-      });
-      p.status = normStatus(it.status);
-      assinatura.push(p.id + ':' + p.status + ':' + p.tamanhos.map(function(s){ return s.estoque; }).join(','));
+      if (!it || typeof it !== 'object') return;
+
+      // estoque por tamanho + status
+      if (it.tamanhos && typeof it.tamanhos === 'object'){
+        p.tamanhos.forEach(function(s){
+          var q = it.tamanhos[s.tamanho];
+          if (typeof q === 'number' && isFinite(q)){
+            s.estoque = Math.max(0, Math.floor(q));
+            s.disponivel = s.estoque > 0;
+          }
+        });
+      }
+      if (it.status) p.status = normStatus(it.status);
+
+      // dados da aba Produtos
+      if (typeof it.preco === 'number' && isFinite(it.preco) && it.preco > 0) p.preco = it.preco;
+      if (typeof it.novo === 'boolean') p.novo = it.novo;
+      if (typeof it.etiqueta === 'string'){
+        var label = it.etiqueta.trim().slice(0, 30);
+        p.tag = label ? { label: label, classe: CLASSES_ETIQUETA[semAcento(label)] || '' } : null;
+      }
+      if (typeof it.visivel === 'boolean') p._oculto = !it.visivel;
+      if (typeof it.destaque === 'boolean') p.destaque = it.destaque;
+
+      assinatura.push([p.id, p.status, p.preco, p.novo, p.tag ? p.tag.label : '', p._oculto ? 1 : 0, p.destaque ? 1 : 0,
+        p.tamanhos.map(function(s){ return s.estoque; }).join(',')].join(':'));
     });
+
+    // Peças marcadas como "Visível = Não" saem de PRODUCTS (catálogo, busca, novidades, home).
+    PRODUCTS.length = 0;
+    TODOS.forEach(function(p){ if (!p._oculto) PRODUCTS.push(p); });
     return assinatura.join('|');
   }
 

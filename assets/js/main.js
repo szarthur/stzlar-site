@@ -59,7 +59,10 @@
   // per-card HTML, so a price/tag change only has to happen in one place.
   const featuredGrid = document.getElementById('featuredGrid');
   function renderFeatured(){
-    featuredGrid.innerHTML = PRODUCTS.slice(0, 4).map(p => renderProductCard(p)).join('');
+    // Planilha: peças com "Destaque na home = Sim" (até 8). Sem nenhuma marcada, usa as 4 primeiras.
+    const marcadas = PRODUCTS.filter(p => p.destaque === true);
+    const lista = marcadas.length ? marcadas.slice(0, 8) : PRODUCTS.slice(0, 4);
+    featuredGrid.innerHTML = lista.map(p => renderProductCard(p)).join('');
     if (typeof updateFavoriteButtonsState === 'function') updateFavoriteButtonsState();
   }
   if (featuredGrid && typeof PRODUCTS !== 'undefined' && typeof renderProductCard === 'function'){

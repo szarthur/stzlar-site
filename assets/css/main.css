@@ -799,3 +799,7 @@
   font-size:9.5px; letter-spacing:.2em; text-transform:uppercase; font-weight:500; color:var(--ink);
   white-space:nowrap; pointer-events:none;
 }
+
+/* ---------- Etiquetas extras (controladas pela planilha) ---------- */
+.prod-tag.tag-promo{background:var(--blue); color:#fff;}
+.prod-tag.tag-last{color:var(--ink); border:1px solid rgba(46,46,46,.28);}

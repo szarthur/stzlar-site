@@ -61,7 +61,23 @@ document.querySelectorAll('input[name="deliveryMethod"]').forEach(radio => {
   radio.addEventListener('change', updateTotals);
 });
 
+// Preço atualizado na planilha vale também para peças que já estavam na sacola.
+function syncCartPrices(){
+  if (typeof getProductById !== 'function') return;
+  const cart = getCart();
+  let changed = false;
+  cart.forEach(item => {
+    const p = getProductById(item.productId);
+    if (p && typeof p.preco === 'number' && item.preco !== p.preco){
+      item.preco = p.preco;
+      changed = true;
+    }
+  });
+  if (changed) saveCart(cart);
+}
+
 function renderCart(){
+  syncCartPrices();
   const cart = getCart();
   const container = document.getElementById('cartItemsContainer');
   const emptyState = document.getElementById('cartEmpty');
@@ -197,3 +213,4 @@ if (checkoutBtn){
 }
 
 renderCart();
+window.addEventListener('stzlar:stock', renderCart);
