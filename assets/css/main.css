@@ -803,3 +803,26 @@
 /* ---------- Etiquetas extras (controladas pela planilha) ---------- */
 .prod-tag.tag-promo{background:var(--blue); color:#fff;}
 .prod-tag.tag-last{color:var(--ink); border:1px solid rgba(46,46,46,.28);}
+
+/* ---------- Aviso e pausa da loja (controlados pela planilha) ---------- */
+.site-notice{
+  position:fixed; left:0; right:0; bottom:0; z-index:1090;
+  display:flex; align-items:center; justify-content:center; gap:14px;
+  padding:12px 16px; background:var(--blue); color:#fff;
+  font-size:13px; line-height:1.4; text-align:center;
+}
+.site-notice button{
+  background:none; border:0; color:#fff; font-size:22px; line-height:1; cursor:pointer; padding:0 6px; opacity:.85;
+}
+.site-notice button:hover{opacity:1;}
+.site-pause{
+  position:fixed; inset:0; z-index:5000;
+  display:flex; align-items:center; justify-content:center;
+  padding:24px; background:#F7FAFA; overflow:auto;
+}
+.site-pause-box{max-width:520px; text-align:center;}
+.site-pause-logo{width:min(240px,60vw); height:auto; margin:0 auto 28px; display:block;}
+.site-pause-box h1{font-family:var(--serif, 'Playfair Display', serif); font-weight:500; font-size:clamp(26px,5vw,36px); margin-bottom:14px; color:var(--ink);}
+.site-pause-box p{font-size:16px; line-height:1.6; color:var(--ink);}
+.site-pause-hours{margin-top:18px; font-size:13px !important; letter-spacing:.12em; text-transform:uppercase; opacity:.7;}
+html.site-paused{overflow:hidden;}

@@ -6,11 +6,12 @@
 // R$350"). Applies to the fixed-price local deliveries (Acarape, Redenção).
 // "Entrega em Fortaleza" is intentionally left out — its price is already
 // variable ("consultar valor"), so there's no fixed cost to waive.
-const FREE_SHIPPING_THRESHOLD = 350;
+// O valor real vem da planilha (getFreeShippingThreshold em config.js); 350 é o padrão.
+function freeShippingThreshold(){ return (typeof getFreeShippingThreshold === 'function') ? getFreeShippingThreshold() : 350; }
 
 function updateDeliveryFreeShipping(){
   const subtotal = getCartSubtotal();
-  const qualifies = subtotal >= FREE_SHIPPING_THRESHOLD;
+  const qualifies = subtotal >= freeShippingThreshold();
 
   document.querySelectorAll('.delivery-option').forEach(option => {
     const input = option.querySelector('input[name="deliveryMethod"]');
@@ -202,7 +203,7 @@ if (checkoutBtn){
     }
 
     const mensagem = buildWhatsAppMessage();
-    const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(mensagem)}`;
+    const url = `https://wa.me/${getWhatsappNumber()}?text=${encodeURIComponent(mensagem)}`;
     window.open(url, '_blank');
 
     clearCart();

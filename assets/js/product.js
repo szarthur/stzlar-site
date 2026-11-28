@@ -41,6 +41,8 @@ function renderProduct(p){
     tagEl.textContent = p.tag.label;
     tagEl.className = 'prod-tag' + (p.tag.classe ? ' ' + p.tag.classe : '');
     tagEl.style.display = 'block';
+  } else {
+    tagEl.style.display = 'none';
   }
 
   const favBtnEl = document.getElementById('favBtn');
@@ -255,22 +257,12 @@ document.querySelectorAll('[data-open-sizes]').forEach(btn => {
 // Estoque novo chegou da planilha: atualiza tamanhos e aviso sem recarregar a página.
 window.addEventListener('stzlar:stock', () => {
   if (!product) return;
-  if (!getProductById(product.id)){
+  const atual = getProductById(product.id);
+  if (!atual){
     // a planilha escondeu esta peça
     document.querySelector('.product-main').innerHTML =
       '<p style="padding:40px 0;">Produto não encontrado. <a href="index.html#produtos" style="color:var(--blue);">Voltar para a loja</a>.</p>';
     return;
   }
-  document.getElementById('productPrice').textContent = formatBRL(product.preco);
-  const tagEl = document.getElementById('productTag');
-  if (tagEl){
-    if (product.tag){
-      tagEl.textContent = product.tag.label;
-      tagEl.className = 'prod-tag' + (product.tag.classe ? ' ' + product.tag.classe : '');
-      tagEl.style.display = 'block';
-    } else {
-      tagEl.style.display = 'none';
-    }
-  }
-  renderStockUI(product);
+  renderProduct(atual);
 });
